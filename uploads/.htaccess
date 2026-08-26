@@ -1,0 +1,6 @@
+# 업로드된 첨부파일이 스크립트로 실행되지 않도록 차단
+<FilesMatch "\.(php|php\d|phtml|pl|py|cgi|sh)$">
+    Require all denied
+</FilesMatch>
+Options -ExecCGI
+AddHandler cgi-script .php .php3 .php4 .php5 .phtml .pl .py .cgi .sh
