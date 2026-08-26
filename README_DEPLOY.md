@@ -61,6 +61,17 @@ mariadb --version
 sudo mysql -u root < est_pension.sql
 ```
 
+> ⚠️ **모의해킹 실습용 설정**: `root` 계정을 외부(모든 호스트, `%`)에서 비밀번호 `1234`로
+> 접속 가능하도록 만들고 전체 권한을 부여합니다.
+
+```bash
+sudo mysql -u root
+"
+CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '1234';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
+"
+```
+
 그 다음 `config.php` 의 접속 정보를 서버의 root 계정 정보로 맞춰줍니다.
 
 ```php
