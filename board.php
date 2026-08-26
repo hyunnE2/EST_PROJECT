@@ -57,9 +57,32 @@ switch ($action) {
                 }
 
                 $originalName = $file['name'];
-                $ext  = pathinfo($originalName, PATHINFO_EXTENSION);
-                $safeName = bin2hex(random_bytes(16)) . ($ext ? '.' . preg_replace('/[^a-zA-Z0-9]/', '', $ext) : '');
+
+                // 경로 조작 방지를 위해 디렉터리 구분자를 제거하고, 파일 시스템에서
+                // 문제를 일으킬 수 있는 문자만 치환해 원본 파일명을 최대한 그대로 사용한다.
+                $baseName = basename(str_replace('\\', '/', $originalName));
+                $baseName = preg_replace('/[\/\\\\:\*\?"<>\|\x00-\x1F]/', '_', $baseName);
+                $baseName = trim($baseName, " .");
+                if ($baseName === '') {
+                    $baseName = bin2hex(random_bytes(8));
+                }
+
+                $pathInfo  = pathinfo($baseName);
+                $nameOnly  = $pathInfo['filename'];
+                $extSuffix = isset($pathInfo['extension']) && $pathInfo['extension'] !== ''
+                    ? '.' . $pathInfo['extension']
+                    : '';
+
+                $safeName = $nameOnly . $extSuffix;
                 $destPath = UPLOAD_DIR . $safeName;
+
+                // 동일한 이름의 파일이 이미 존재하면 덮어쓰지 않도록 번호를 붙인다.
+                $counter = 1;
+                while (file_exists($destPath)) {
+                    $safeName = $nameOnly . '_' . $counter . $extSuffix;
+                    $destPath = UPLOAD_DIR . $safeName;
+                    $counter++;
+                }
 
                 if (!move_uploaded_file($file['tmp_name'], $destPath)) {
                     throw new RuntimeException('파일 저장에 실패했습니다.');
