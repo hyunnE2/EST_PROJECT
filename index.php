@@ -40,7 +40,6 @@ $currentUsername = $user['username'] ?? null;
 <header id="header">
   <a href="#home" class="logo">EST<small>JEJU PENSION</small></a>
   <nav>
-    <a href="#reservation">예약</a>
     <a href="#rooms">객실보기</a>
     <a href="#special">주변여행지</a>
     <a href="#location">오시는길</a>

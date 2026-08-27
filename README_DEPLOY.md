@@ -8,7 +8,7 @@ Apache(httpd) + PHP + MariaDB 조합으로 배포하는 절차입니다.
 ## 0. 사전 준비
 
 - Rocky Linux 10.2 서버 (root 또는 sudo 권한)
-- 프로젝트 파일 전체 (`index.php`, `config.php`, `auth.php`, `reservation.php`, `board.php`,
+- 프로젝트 파일 전체 (`index.php`, `config.php`, `auth.php`, `board.php`,
   `script.js`, `style.css`, `est_pension.sql`, `uploads/`, 그리고 기존에 갖고 계신 `Image/` 폴더)
 
 ---
@@ -54,7 +54,7 @@ mariadb --version
 
 ## 2. DB 생성 및 스키마 임포트
 
-제공된 `est_pension.sql` 을 그대로 임포트합니다 (users/posts/files/reservations 테이블과
+제공된 `est_pension.sql` 을 그대로 임포트합니다 (users/posts/files 테이블과
 초기 관리자 계정, 샘플 게시글이 함께 생성됩니다):
 
 ```bash
@@ -92,7 +92,6 @@ define('DB_PASS', '1234');
 ├── index.php
 ├── config.php
 ├── auth.php
-├── reservation.php
 ├── board.php
 ├── script.js
 ├── style.css

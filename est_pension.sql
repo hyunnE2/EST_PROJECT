@@ -58,21 +58,6 @@ CREATE TABLE files (
         ON UPDATE CASCADE
 );
 
--- ---------------------------------------------------------
--- 4. 실시간 예약 (reservations) - 신규 추가
--- ---------------------------------------------------------
-CREATE TABLE reservations (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT DEFAULT NULL,
-    room VARCHAR(50) NOT NULL,          -- Ocean A / Garden B / Suite C
-    guests VARCHAR(20) NOT NULL,        -- 예: '2명'
-    check_in DATE NOT NULL,
-    check_out DATE NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id)
-        ON DELETE SET NULL
-        ON UPDATE CASCADE
-);
 
 -- ---------------------------------------------------------
 -- 초기 데이터
