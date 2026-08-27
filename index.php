@@ -80,24 +80,6 @@ $currentUsername = $user['username'] ?? null;
   </div>
 </section>
 
-<section class="reservation" id="reservation">
-  <div class="reservation-box">
-    <div><div class="kicker">REAL-TIME RESERVATION</div><h2>원하는 날짜를 선택하세요</h2><p>숙박 날짜와 객실을 선택해 예약 가능 여부를 확인할 수 있습니다.</p></div>
-    <form id="reservationForm" class="reserve-form">
-      <label>CHECK IN<input type="date" id="checkIn" required></label>
-      <label>CHECK OUT<input type="date" id="checkOut" required></label>
-      <label>ROOM<select id="reserveRoom">
-        <option value="Ocean A">Ocean A</option>
-        <option value="Garden B">Garden B</option>
-        <option value="Suite C">Suite C</option>
-      </select></label>
-      <label>GUESTS<select id="guests"></select></label>
-      <button type="submit">확인</button>
-    </form>
-    <div class="reserve-result" id="reserveResult"></div>
-  </div>
-</section>
-
 <section class="rooms-wrap" id="rooms">
   <div class="rooms-inner">
     <div class="section-head">
