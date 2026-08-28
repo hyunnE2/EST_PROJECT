@@ -312,6 +312,7 @@ document.addEventListener("click", async (e) => {
         body: new URLSearchParams({ action: "logout" }),
       });
     } finally {
+      alert("로그인아웃 되었습니다.");
       window.location.reload();
     }
   }

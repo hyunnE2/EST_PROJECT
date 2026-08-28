@@ -103,48 +103,12 @@ define('DB_PASS', '1234');
 소유권 및 권한 설정 (Apache 가 uploads 디렉토리에 쓸 수 있어야 합니다):
 
 ```bash
-sudo chown -R apache:apache /var/www/html/est
-sudo chmod -R 755 /var/www/html/est
-sudo chmod -R 775 /var/www/html/est/uploads
+sudo chown -R apache:apache /var/www/html
+sudo chmod -R 755 /var/www/html
+sudo chmod -R 775 /var/www/html/uploads
 ```
 
----
-
-## 4. Apache 가상호스트 설정 (index.php 를 기본 페이지로)
-
-> ⚠️ **모의해킹 실습용 설정**: 아래 vhost는 VULN-05(디렉터리 리스팅) 실습을 위해
-> `Options +Indexes` 를 켜 두었습니다. `uploads/`, `notices/` 등 하위 폴더 목록이
-> 브라우저에서 그대로 보이게 됩니다. 실제 운영 배포 시에는 `-Indexes` 로 되돌리세요.
-
-`/etc/httpd/conf.d/est.conf` 생성:
-
-```apache
-<VirtualHost *:80>
-    ServerName est.example.com
-    DocumentRoot /var/www/html/est
-    DirectoryIndex index.php index.html
-
-    <Directory /var/www/html/est>
-        Options +Indexes
-        AllowOverride All
-        Require all granted
-    </Directory>
-
-    ErrorLog /var/log/httpd/est_error.log
-    CustomLog /var/log/httpd/est_access.log combined
-</VirtualHost>
-```
-
-설정 반영:
-
-```bash
-sudo apachectl configtest
-sudo systemctl restart httpd
-```
-
----
-
-## 5. 접속 확인
+## 4. 접속 확인
 
 브라우저에서 `http://서버IP주소/` 또는 설정한 도메인으로 접속하면
 `index.php` 가 기본 페이지로 렌더링됩니다.
