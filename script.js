@@ -155,12 +155,19 @@ writeForm.addEventListener("submit", async function (e) {
 
   if (!title || !content) return;
 
+  const MAX_UPLOAD_BYTES = 5 * 1024 * 1024; // board.php 의 MAX_UPLOAD_BYTES 와 동일
+  const file = fileInput.files[0];
+  if (file && file.size > MAX_UPLOAD_BYTES) {
+    alert("첨부파일 용량은 5MB를 초과할 수 없습니다.");
+    return;
+  }
+
   const formData = new FormData();
   formData.append("action", "create");
   formData.append("title", title);
   formData.append("content", content);
-  if (fileInput.files[0]) {
-    formData.append("file", fileInput.files[0]);
+  if (file) {
+    formData.append("file", file);
   }
 
   try {

@@ -12,7 +12,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // ── DB 접속 정보 (환경에 맞게 수정하세요) ───────────────────
-define('DB_HOST', '192.168.159.137');
+define('DB_HOST', 'localhost');
 define('DB_NAME', 'webproject');
 define('DB_USER', 'root');
 define('DB_PASS', '1234');
@@ -62,6 +62,11 @@ function maskAuthorId(string $authorId, ?string $currentUserId): string {
 
 /** JSON 응답 후 종료 (AJAX 엔드포인트 공용) */
 function jsonResponse($data, int $status = 200): void {
+    // PHP 경고/공백 등이 JSON 앞에 섞여 파싱이 깨지는 것을 방지하기 위해
+    // 그동안 버퍼링된 출력을 모두 버린다.
+    while (ob_get_level() > 0) {
+        ob_end_clean();
+    }
     http_response_code($status);
     header('Content-Type: application/json; charset=utf-8');
     echo json_encode($data, JSON_UNESCAPED_UNICODE);

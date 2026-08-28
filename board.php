@@ -9,6 +9,18 @@
 
 require __DIR__ . '/config.php';
 
+// POST 본문이 php.ini 의 post_max_size 를 초과하면 PHP 가 $_POST/$_FILES 를
+// 통째로 비우므로, action 을 읽기 전에 이 상황을 먼저 잡아 안내한다.
+if ($_SERVER['REQUEST_METHOD'] === 'POST'
+    && empty($_POST) && empty($_FILES)
+    && (int)($_SERVER['CONTENT_LENGTH'] ?? 0) > 0
+) {
+    jsonResponse([
+        'ok' => false,
+        'message' => '전송 용량이 서버 허용치를 초과했습니다. 첨부파일은 5MB 이하로 올려 주세요.',
+    ], 413);
+}
+
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
 // 첨부파일 업로드 디렉토리
@@ -47,6 +59,9 @@ switch ($action) {
                 $file = $_FILES['file'];
 
                 if ($file['error'] !== UPLOAD_ERR_OK) {
+                    if (in_array($file['error'], [UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE], true)) {
+                        throw new RuntimeException('파일 용량은 5MB를 초과할 수 없습니다.');
+                    }
                     throw new RuntimeException('파일 업로드 중 오류가 발생했습니다.');
                 }
                 if ($file['size'] > MAX_UPLOAD_BYTES) {
@@ -178,5 +193,5 @@ switch ($action) {
     }
 
     default:
-        jsonResponse(['ok' => false, 'message' => '알 수 없는 요청입니다.'], 400);
+        jsonResponse(['ok' => false, 'message' => '알 수 없는 요청입니다.', 'type' => $action], 400);
 }
