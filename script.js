@@ -1,7 +1,7 @@
 // =========================================================
 // EST PENSION - script.js (DB 연동 버전)
 // 기존 localStorage 기반 로직을 서버(PHP+MySQL) API 호출로 교체했습니다.
-// main.php 가 렌더링 시 body 태그에 심어준 data-logged-in / data-username 값으로
+// index.php 가 렌더링 시 body 태그에 심어준 data-logged-in / data-username 값으로
 // 최초 로그인 상태를 판단합니다 (localStorage 대신 서버 세션 사용).
 // =========================================================
 
@@ -174,7 +174,7 @@ writeForm.addEventListener("submit", async function (e) {
     closeModal();
     this.reset();
     // 최신 목록/조회수/페이지네이션을 정확히 반영하기 위해 새로고침 (1페이지 기준)
-    window.location.href = "main.php#contact";
+    window.location.href = "index.php#contact";
   } catch (err) {
     alert("등록 중 오류가 발생했습니다.");
   }

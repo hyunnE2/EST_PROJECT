@@ -210,11 +210,11 @@ $currentUsername = $user['username'] ?? null;
       </div>
 
       <div class="pagination">
-        <a href="main.php?page=<?= max(1, $page - 1) ?>#contact"><button type="button"<?= $page <= 1 ? ' disabled' : '' ?>>‹</button></a>
+        <a href="index.php?page=<?= max(1, $page - 1) ?>#contact"><button type="button"<?= $page <= 1 ? ' disabled' : '' ?>>‹</button></a>
         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-          <a href="main.php?page=<?= $i ?>#contact"><button type="button" class="<?= $i === $page ? 'active' : '' ?>"><?= $i ?></button></a>
+          <a href="index.php?page=<?= $i ?>#contact"><button type="button" class="<?= $i === $page ? 'active' : '' ?>"><?= $i ?></button></a>
         <?php endfor; ?>
-        <a href="main.php?page=<?= min($totalPages, $page + 1) ?>#contact"><button type="button"<?= $page >= $totalPages ? ' disabled' : '' ?>>›</button></a>
+        <a href="index.php?page=<?= min($totalPages, $page + 1) ?>#contact"><button type="button"<?= $page >= $totalPages ? ' disabled' : '' ?>>›</button></a>
       </div>
     </div>
   </div>

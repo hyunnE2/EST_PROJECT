@@ -53,10 +53,15 @@ switch ($action) {
                     throw new RuntimeException('파일 용량은 5MB를 초과할 수 없습니다.');
                 }
                 if (!is_dir(UPLOAD_DIR)) {
-                    mkdir(UPLOAD_DIR, 0755, true);
+                    if (!mkdir(UPLOAD_DIR, 0755, true) && !is_dir(UPLOAD_DIR)) {
+                        throw new RuntimeException('업로드 폴더를 만들 수 없습니다.');
+                    }
                 }
-                
-                $destPath = UPLOAD_DIR . $file['name'];
+
+                $originalName = basename((string)$file['name']);
+                $extension = pathinfo($originalName, PATHINFO_EXTENSION);
+                $safeName = bin2hex(random_bytes(16)) . ($extension !== '' ? '.' . strtolower($extension) : '');
+                $destPath = UPLOAD_DIR . $safeName;
 
                 if (!move_uploaded_file($file['tmp_name'], $destPath)) {
                     throw new RuntimeException('파일 저장에 실패했습니다.');
@@ -71,13 +76,13 @@ switch ($action) {
                 $stmt->execute([
                     ':uid'   => $user['id'],
                     ':pid'   => $postId,
-                    ':fname' => $file['name'],
+                    ':fname' => $originalName,
                     ':fpath' => UPLOAD_URL . $safeName,
                     ':mime'  => $mimeType,
                 ]);
 
                 $attachment = [
-                    'name' => $file['name'],
+                    'name' => $originalName,
                     'url'  => UPLOAD_URL . $safeName,
                     'isImage' => str_starts_with($mimeType, 'image/'),
                 ];
