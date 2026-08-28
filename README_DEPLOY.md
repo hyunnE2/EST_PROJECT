@@ -17,6 +17,7 @@ Apache(httpd) + PHP + MariaDB 조합으로 배포하는 절차입니다.
 
 ```bash
 sudo dnf update -y
+sudo dnf install -y epel-release
 
 # 웹서버
 sudo dnf install -y httpd
@@ -54,7 +55,7 @@ mariadb --version
 
 ## 2. DB 생성 및 스키마 임포트
 
-제공된 `est_pension.sql` 을 그대로 임포트합니다 (users/posts/files 테이블과
+제공된 `est_project` 을 그대로 임포트합니다 (users/posts/files 테이블과
 초기 관리자 계정, 샘플 게시글이 함께 생성됩니다):
 
 ```bash
@@ -66,10 +67,13 @@ sudo mysql -u root < est_pension.sql
 
 ```bash
 sudo mysql -u root
-"
+```
+
+```sql
 CREATE USER IF NOT EXISTS 'root'@'%' IDENTIFIED BY '1234';
 GRANT ALL PRIVILEGES ON *.* TO 'root'@'%';
-"
+ALTER USER 'root'@'localhost' IDENTIFIED BY '1234';
+FLUSH PRIVILEGES;
 ```
 
 그 다음 `config.php` 의 접속 정보를 서버의 root 계정 정보로 맞춰줍니다.
