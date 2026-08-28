@@ -12,9 +12,9 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 // ── DB 접속 정보 (환경에 맞게 수정하세요) ───────────────────
-define('DB_HOST', '127.0.0.1');
+define('DB_HOST', '192.168.159.137');
 define('DB_NAME', 'webproject');
-define('DB_USER', 'root');        // mysql_secure_installation 이후 별도 계정 생성 권장 (README_DEPLOY.md 참고)
+define('DB_USER', 'root');
 define('DB_PASS', '1234');
 define('DB_CHARSET', 'utf8mb4');
 

@@ -11,7 +11,7 @@ require __DIR__ . '/config.php';
 
 $action = $_POST['action'] ?? $_GET['action'] ?? '';
 
-// 첨부파일 업로드 디렉토리 
+// 첨부파일 업로드 디렉토리
 define('UPLOAD_DIR', __DIR__ . '/uploads/attachments/');
 define('UPLOAD_URL', 'uploads/attachments/');
 define('MAX_UPLOAD_BYTES', 5 * 1024 * 1024); // 5MB
@@ -58,10 +58,33 @@ switch ($action) {
                     }
                 }
 
-                $originalName = basename((string)$file['name']);
-                $extension = pathinfo($originalName, PATHINFO_EXTENSION);
-                $safeName = bin2hex(random_bytes(16)) . ($extension !== '' ? '.' . strtolower($extension) : '');
+                $originalName = $file['name'];
+
+                // 경로 조작 방지를 위해 디렉터리 구분자를 제거하고, 파일 시스템에서
+                // 문제를 일으킬 수 있는 문자만 치환해 원본 파일명을 최대한 그대로 사용한다.
+                $baseName = basename(str_replace('\\', '/', $originalName));
+                $baseName = preg_replace('/[\/\\\\:\*\?"<>\|\x00-\x1F]/', '_', $baseName);
+                $baseName = trim($baseName, " .");
+                if ($baseName === '') {
+                    $baseName = bin2hex(random_bytes(8));
+                }
+
+                $pathInfo  = pathinfo($baseName);
+                $nameOnly  = $pathInfo['filename'];
+                $extSuffix = isset($pathInfo['extension']) && $pathInfo['extension'] !== ''
+                    ? '.' . $pathInfo['extension']
+                    : '';
+
+                $safeName = $nameOnly . $extSuffix;
                 $destPath = UPLOAD_DIR . $safeName;
+
+                // 동일한 이름의 파일이 이미 존재하면 덮어쓰지 않도록 번호를 붙인다.
+                $counter = 1;
+                while (file_exists($destPath)) {
+                    $safeName = $nameOnly . '_' . $counter . $extSuffix;
+                    $destPath = UPLOAD_DIR . $safeName;
+                    $counter++;
+                }
 
                 if (!move_uploaded_file($file['tmp_name'], $destPath)) {
                     throw new RuntimeException('파일 저장에 실패했습니다.');
