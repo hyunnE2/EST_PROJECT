@@ -265,6 +265,7 @@ signupForm.addEventListener("submit", async function (e) {
     showMessage(signupMessage, data.message);
     if (data.ok) {
       this.reset();
+      alert("회원가입이 완료되었습니다.");
       setTimeout(() => showAuth("login"), 1000);
     }
   } catch (err) {
